@@ -2,7 +2,7 @@
 
 A premium, full-stack e-commerce web application engineered for high performance and data integrity. This project features a decoupled architecture, pairing a highly responsive Vanilla JavaScript frontend with a robust Django REST API and a normalized MySQL relational database.
 
-![Swimming Store Home Page Preview](Photos/home_page.jpg)
+![Swimming Store Home Page Preview](Photos/home_page.png)
 
 🎥 **[Watch the Full Demo Video Here](PLACE_YOUR_VIDEO_LINK_HERE)**
 
