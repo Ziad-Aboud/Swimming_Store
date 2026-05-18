@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right"><button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button></div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i><span class="badge" id="wishBadge">0</span></a>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container profile-page">
+        <div class="profile-layout">
+            <div class="profile-sidebar">
+                <div class="profile-avatar" id="profileInitials">JD</div>
+                <h3 id="profileName">John Doe</h3>
+                <p id="profileEmail">john.doe@email.com</p>
+                <nav class="profile-nav">
+                    <a href="profile.html" class="active"><i class="fas fa-user"></i> My Profile</a>
+                    <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+                    <a href="wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
+                    <a href="addresses.html"><i class="fas fa-map-marker-alt"></i> Addresses</a>
+                    <a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a>
+                    <a href="#" onclick="event.preventDefault(); logoutUser();" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </nav>
+            </div>
+
+            <div class="profile-content">
+                <h2>Personal Information</h2>
+                <form id="profileForm">
+                    <div class="form-row">
+                        <div class="form-group"><label>First Name</label><input type="text" id="formFirstName" class="form-control" value="John"></div>
+                        <div class="form-group"><label>Last Name</label><input type="text" id="formLastName" class="form-control" value="Doe"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="formEmail" class="form-control" value="john.doe@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="formPhone" class="form-control" placeholder="Add phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="formDob" class="form-control">
+                    </div>
+
+                    <h2 style="margin-top:32px">Change Password</h2>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPassword" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" id="newPassword" class="form-control" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="confirmPassword" class="form-control" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top:8px">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container"><div class="footer-bottom" style="border:none"><p>&copy; 2025 Swimming Store.</p></div></div>
+    </footer>
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Kick out guests!
+            if (!CURRENT_USER_ID) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // 2. Inject the real user data into the HTML
+            if (currentUser) {
+                // Update Sidebar
+                document.getElementById('profileName').textContent = currentUser.first_name + (currentUser.last_name ? ' ' + currentUser.last_name : '');
+                // You may need to update views.login_user to include the email in the response!
+                if (currentUser.email) {
+                    document.getElementById('profileEmail').textContent = currentUser.email;
+                }
+                
+                // Update Initials (First letter of first name)
+                document.getElementById('profileInitials').textContent = currentUser.first_name.charAt(0).toUpperCase();
+
+                // Update Form Inputs
+                const formFName = document.getElementById('formFirstName');
+                const formLName = document.getElementById('formLastName');
+                const formEmail = document.getElementById('formEmail');
+                const formPhone = document.getElementById('formPhone');
+                const formDob = document.getElementById('formDob');
+                
+                if (formFName) formFName.value = currentUser.first_name;
+                if (formLName && currentUser.last_name) formLName.value = currentUser.last_name;
+                if (formEmail && currentUser.email) formEmail.value = currentUser.email;
+                
+                // If they have a phone/dob in the database, show it. Otherwise, leave it blank!
+                if (formPhone) formPhone.value = currentUser.phone || '';
+                if (formDob) formDob.value = currentUser.dob || '';
+            }
+
+            const profileForm = document.getElementById('profileForm');
+            if (profileForm) {
+                profileForm.addEventListener('submit', async (e) => {
+                    e.preventDefault(); 
+                    // Grab all the values
+                    const fName = document.getElementById('formFirstName').value;
+                    const lName = document.getElementById('formLastName').value;
+                    const email = document.getElementById('formEmail').value;
+                    const phone = document.getElementById('formPhone').value;
+                    const dob = document.getElementById('formDob').value;
+                    
+                    const currentPass = document.getElementById('currentPassword').value;
+                    const newPass = document.getElementById('newPassword').value;
+                    const confirmPass = document.getElementById('confirmPassword').value;
+
+                    // --- FRONTEND VALIDATION ---
+                    // Check if new passwords match
+                    if (newPass && newPass !== confirmPass) {
+                        showToast('New passwords do not match!', 'error');
+                        return; // Stop code
+                    }
+                    // Prevent entering a new password without providing the old one
+                    if (newPass && !currentPass) {
+                        showToast('Please enter your current password to authorize changes.', 'error');
+                        return;
+                    }
+
+                    // --- SEND TO DJANGO ---
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/users/${CURRENT_USER_ID}/`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                first_name: fName,
+                                last_name: lName,
+                                email: email,
+                                phone: phone,
+                                dob: dob,
+                                current_password: currentPass,
+                                new_password: newPass
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            showToast(data.message, 'success');
+                            
+                            // Update the browser's memory so we don't have to log out!
+                            localStorage.setItem('ssUser', JSON.stringify(data.user));
+                            
+                            // Clear out the password fields for security
+                            document.getElementById('currentPassword').value = '';
+                            document.getElementById('newPassword').value = '';
+                            document.getElementById('confirmPassword').value = '';
+                            
+                            // Update the top-left sidebar name instantly
+                            document.getElementById('profileName').textContent = data.user.first_name + ' ' + data.user.last_name;
+                            document.getElementById('profileInitials').textContent = data.user.first_name.charAt(0).toUpperCase();
+
+                        } else {
+                            showToast(data.error || 'Update failed', 'error');
+                        }
+                    } catch (error) {
+                        console.error("Profile update error:", error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

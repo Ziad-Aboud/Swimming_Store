@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right"><button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button></div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <a href="login.html" class="nav-icon"><i class="fas fa-user"></i></a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Contact</span></div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container" style="max-width:1000px">
+            <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:48px">
+                <div>
+                    <h2 style="font-family:var(--font-display);font-size:2rem;margin-bottom:16px">Get in Touch</h2>
+                    <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:32px">Have a question about our products, need sizing help, or want to place a bulk order? We'd love to hear from you.</p>
+
+                    <div style="display:flex;flex-direction:column;gap:24px">
+                        <div style="display:flex;gap:16px;align-items:flex-start">
+                            <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(0,102,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.1rem;flex-shrink:0">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <strong style="display:block;margin-bottom:4px">Visit Us</strong>
+                                <span style="color:var(--text-secondary);font-size:0.9rem">ش يوسف الصديق تقاطع عثمان بن عفان اول طنطا</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:16px;align-items:flex-start">
+                            <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(0,212,170,0.1);display:flex;align-items:center;justify-content:center;color:var(--secondary);font-size:1.1rem;flex-shrink:0">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <strong style="display:block;margin-bottom:4px">Call Us</strong>
+                                <span style="color:var(--text-secondary);font-size:0.9rem">01281825021<br>Mon–Fri 9am–6pm EST</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:16px;align-items:flex-start">
+                            <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(255,107,53,0.1);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.1rem;flex-shrink:0">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <strong style="display:block;margin-bottom:4px">Email Us</strong>
+                                <span style="color:var(--text-secondary);font-size:0.9rem">hello@swimmingstore.com<br>support@swimmingstore.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px">
+                    <h3 style="font-size:1.3rem;margin-bottom:24px">Send a Message</h3>
+                    <form onsubmit="event.preventDefault(); showToast('Message sent! We\'ll get back to you soon.','success'); this.reset()">
+                        <div class="form-row">
+                            <div class="form-group"><label>Name</label><input type="text" class="form-control" placeholder="Your name" required></div>
+                            <div class="form-group"><label>Email</label><input type="email" class="form-control" placeholder="you@email.com" required></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select class="form-control">
+                                <option>General Inquiry</option>
+                                <option>Product Question</option>
+                                <option>Order Support</option>
+                                <option>Bulk Order</option>
+                                <option>Press</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea class="form-control" rows="5" placeholder="Tell us what's on your mind..." required style="resize:vertical"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">
+                            Send Message <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container"><div class="footer-bottom" style="border:none"><p>&copy; 2025 Swimming Store. All rights reserved.</p></div></div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+    <script src="../js/main.js"></script>
+</body>
+</html>

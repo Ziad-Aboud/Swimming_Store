@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right"><button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button></div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container profile-page">
+        <div class="profile-layout">
+            <div class="profile-sidebar">
+                <div class="profile-avatar" id="profileInitials">JD</div>
+                <h3 id="profileName">John Doe</h3>
+                <p id="profileEmail">john.doe@email.com</p>
+                <nav class="profile-nav">
+                    <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+                    <a href="orders.html" class="active"><i class="fas fa-box"></i> My Orders</a>
+                    <a href="wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
+                    <a href="addresses.html"><i class="fas fa-map-marker-alt"></i> Addresses</a>
+                    <a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a>
+                    <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+            </div>
+
+            <div class="profile-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h2>My Orders</h2>
+                </div>
+
+                <div class="order-tabs" style="display: flex; gap: 24px; margin-bottom: 24px; border-bottom: 2px solid #f1f5f9;">
+                    <button class="tab-btn active" data-status="All" style="background:none; border:none; padding:10px 4px; font-weight:600; cursor:pointer; color:var(--primary); border-bottom: 2px solid var(--primary); margin-bottom:-2px; font-size: 0.95rem;">All Orders</button>
+                    <button class="tab-btn" data-status="Pending" style="background:none; border:none; padding:10px 4px; font-weight:600; cursor:pointer; color:#64748b; font-size: 0.95rem;">Pending</button>
+                    <button class="tab-btn" data-status="Shipped" style="background:none; border:none; padding:10px 4px; font-weight:600; cursor:pointer; color:#64748b; font-size: 0.95rem;">Shipped</button>
+                    <button class="tab-btn" data-status="Delivered" style="background:none; border:none; padding:10px 4px; font-weight:600; cursor:pointer; color:#64748b; font-size: 0.95rem;">Delivered</button>
+                </div>
+
+                <div id="ordersContainer" style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                    <div style="text-align: center; padding: 40px; color: #666;"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container"><div class="footer-bottom" style="border:none"><p>&copy; 2025 Swimming Store.</p></div></div>
+    </footer>
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!CURRENT_USER_ID) { window.location.href = 'login.html'; return; }
+
+            if (currentUser) {
+                document.getElementById('profileName').textContent = currentUser.first_name + (currentUser.last_name ? ' ' + currentUser.last_name : '');
+                if (currentUser.email) document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('profileInitials').textContent = currentUser.first_name.charAt(0).toUpperCase();
+            }
+
+            document.querySelectorAll('.profile-nav a').forEach(link => {
+                if(link.innerHTML.includes('My Orders')) { link.classList.add('active'); link.href="orders.html"; }
+                else { link.classList.remove('active'); }
+            });
+
+            const container = document.getElementById('ordersContainer');
+            let allOrders = []; 
+
+            // --- 1. Fetch Orders from Django ---
+            async function fetchOrders() {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/orders/${CURRENT_USER_ID}/`);
+                    const data = await res.json();
+                    
+                    if (data.orders && data.orders.length > 0) {
+                        allOrders = data.orders;
+                        renderOrders('All'); 
+                    } else {
+                        container.innerHTML = `<div style="text-align:center; padding: 40px; color:#666; border: 1px dashed #ccc; border-radius: 8px;">No orders found.</div>`;
+                    }
+                } catch (error) {
+                    console.error("Error loading orders:", error);
+                    container.innerHTML = `<div style="color:red; text-align:center; padding: 20px;">Failed to load orders.</div>`;
+                }
+            }
+
+            // --- 2. Render Orders Based on Selected Tab ---
+            function renderOrders(filterStatus) {
+                const filteredOrders = filterStatus === 'All' 
+                    ? allOrders 
+                    : allOrders.filter(order => order.status.toLowerCase() === filterStatus.toLowerCase());
+
+                if (filteredOrders.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding: 40px; color:#64748b; background: white; border: 1px solid #eaeaea; border-radius: 12px;">
+                            <i class="fas fa-box-open" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 10px;"></i>
+                            <p style="margin: 0;">No ${filterStatus !== 'All' ? filterStatus.toLowerCase() : ''} orders found.</p>
+                        </div>`;
+                    return;
+                }
+
+                // Draw the HTML
+                container.innerHTML = filteredOrders.map(order => {
+                    // Determine Dynamic Badge Colors
+                    let badgeBg = '#f1f5f9'; let badgeColor = '#475569'; // Default
+                    const stat = order.status.toLowerCase();
+                    
+                    if (stat === 'pending') { badgeBg = '#fef08a'; badgeColor = '#854d0e'; } // Yellow
+                    else if (stat === 'shipped') { badgeBg = '#bfdbfe'; badgeColor = '#1e3a8a'; } // Blue
+                    else if (stat === 'delivered') { badgeBg = '#bbf7d0'; badgeColor = '#166534'; } // Green
+
+                    // Draw Items List
+                    const itemsHTML = order.items.map(item => `
+                        <div style="display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f1f5f9;">
+                            
+                            <div style="width: 50px; height: 50px; background: #f8f9fb; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #eaeaea;">
+                                <img src="${item.image}" alt="${item.product_name}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; color: #0f172a;">${item.product_name}</h4>
+                                <p style="margin: 0; font-size: 0.85rem; color: #64748b;">Size: ${item.size || 'N/A'} | Color: ${item.color || 'N/A'} &times; ${item.quantity}</p>
+                            </div>
+                            <div style="font-weight: 600; color: #0f172a;">$${item.price.toFixed(2)}</div>
+                        </div>
+                    `).join('');
+
+                    // Draw Full Order Card
+                    return `
+                        <div style="background: white; border: 1px solid #eaeaea; border-radius: 12px; padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; padding-bottom: 16px; margin-bottom: 8px;">
+                                <div style="display: flex; gap: 40px;">
+                                    <div>
+                                        <p style="margin: 0 0 4px 0; font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Order ID</p>
+                                        <p style="margin: 0; font-weight: 600; color: #0f172a;">#SS-2026-${String(order.order_id).padStart(3, '0')}</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0 0 4px 0; font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Total</p>
+                                        <p style="margin: 0; font-weight: 600; color: #0f172a;">$${order.total.toFixed(2)}</p>
+                                    </div>
+                                </div>
+                                <span style="background: ${badgeBg}; color: ${badgeColor}; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                    ${order.status}
+                                </span>
+                            </div>
+                            ${itemsHTML}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // --- 3. Tab Click Listener ---
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Reset all tabs to inactive gray
+                    document.querySelectorAll('.tab-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.style.color = '#64748b';
+                        b.style.borderBottom = 'none';
+                    });
+                    
+                    // Set clicked tab to active blue
+                    e.target.classList.add('active');
+                    e.target.style.color = 'var(--primary)';
+                    e.target.style.borderBottom = '2px solid var(--primary)';
+                    e.target.style.marginBottom = '-2px';
+                    
+                    // Filter the orders!
+                    renderOrders(e.target.dataset.status);
+                });
+            });
+
+            fetchOrders();
+        });
+    </script>
+</body>
+</html>

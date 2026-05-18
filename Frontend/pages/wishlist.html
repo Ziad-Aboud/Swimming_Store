@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right"><button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button></div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i><span class="badge" id="wishBadge">0</span></a>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <a href="login.html" class="nav-icon"><i class="fas fa-user"></i></a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header" style="background:linear-gradient(135deg,var(--dark),var(--dark-3));padding:120px 0 60px">
+        <div class="container">
+            <h1 style="font-family:var(--font-display);font-size:3rem;color:white">My Wishlist</h1>
+            <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Wishlist</span></div>
+        </div>
+    </div>
+
+    <div class="container wishlist-page">
+        <div id="wishlistContainer">
+            <div style="text-align: center; padding: 60px 20px;">
+                <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i>
+                <p style="margin-top:10px; color:#64748b;">Loading your favorites...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container"><div class="footer-bottom" style="border:none"><p>&copy; 2025 Swimming Store.</p></div></div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // CLEANED UP SCRIPT: Only one listener, talking directly to Django!
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!CURRENT_USER_ID) { window.location.href = 'login.html'; return; }
+
+            const container = document.getElementById('wishlistContainer');
+
+            async function loadWishlistPage() {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/wishlist/${CURRENT_USER_ID}/`);
+                    const data = await res.json();
+                    
+                    const products = data.products;
+
+                    if (!products || products.length === 0) {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 60px; background: white; border-radius: 12px; border: 1px solid #eaeaea;">
+                                <i class="far fa-heart" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                                <h3 style="color: #0f172a;">Your wishlist is empty</h3>
+                                <p style="color: #64748b; margin-bottom: 20px;">Save items you love to review them later.</p>
+                                <a href="shop.html" class="btn btn-primary">Explore Products</a>
+                            </div>`;
+                        return;
+                    }
+
+                    // Draw the grid!
+                    container.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                        ${products.map(product => {
+                            // --- NEW: Extract the image URL safely! ---
+                            let primaryImage = '../assets/placeholder.jpg';
+                            if (product.images && product.images.length > 0) {
+                                primaryImage = product.images[0].image_url; 
+                            }
+
+                            return `
+                            <div class="product-card" id="wish-card-${product.product_id}" style="position: relative; background: white; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; cursor: pointer;" onclick="window.location.href='product.html?id=${product.product_id}'">
+                                
+                                <button onclick="removeFromWishlist(event, ${product.product_id})" 
+                                        style="position: absolute; top: 12px; right: 12px; z-index: 10; background: white; border: none; border-radius: 50%; width: 36px; height: 36px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); cursor: pointer; color: #ef4444;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                
+                                <div style="height: 180px; background: #f8f9fb; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    <img src="${primaryImage}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="padding: 20px;">
+                                    <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: #0f172a;">${product.name}</h3>
+                                    <div style="font-size: 1.25rem; font-weight: bold; color: var(--primary);">$${parseFloat(product.base_price).toFixed(2)}</div>
+                                </div>
+                            </div>
+                        `}).join('')}
+                    </div>`;
+                } catch (error) {
+                    console.error("Fetch Error:", error);
+                    container.innerHTML = '<p style="color:red; text-align:center;">Failed to load wishlist.</p>';
+                }
+            }
+
+            // Function to remove item directly from the wishlist page
+            window.removeFromWishlist = async function(event, productId) {
+                event.stopPropagation();
+                try {
+                    const res = await fetch(`${API_BASE_URL}/wishlist/toggle/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: CURRENT_USER_ID, product_id: productId })
+                    });
+                    
+                    if (res.ok) {
+                        // 1. Physically remove the card from the HTML
+                        const card = document.getElementById(`wish-card-${productId}`);
+                        if (card) {
+                            card.remove();
+                        }
+                        
+                        if (typeof updateWishlistBadge === 'function') updateWishlistBadge();
+
+                        // 2. Check if the grid is now completely empty
+                        const grid = document.querySelector('#wishlistContainer > div');
+                        if (!grid || grid.children.length === 0) {
+                            const container = document.getElementById('wishlistContainer');
+                            container.innerHTML = `
+                                <div style="text-align: center; padding: 60px; background: white; border-radius: 12px; border: 1px solid #eaeaea;">
+                                    <i class="far fa-heart" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                                    <h3 style="color: #0f172a;">Your wishlist is empty</h3>
+                                    <p style="color: #64748b; margin-bottom: 20px;">Save items you love to review them later.</p>
+                                    <a href="shop.html" class="btn btn-primary">Explore Products</a>
+                                </div>`;
+                        }
+                    }
+                } catch(e) { console.error(e); }
+            };
+
+            loadWishlistPage();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right"><button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button></div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i><span class="badge" id="wishBadge">0</span></a>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <a href="login.html" class="nav-icon"><i class="fas fa-user"></i></a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header" style="background:linear-gradient(135deg,var(--dark),var(--dark-3));padding:120px 0 60px">
+        <div class="container">
+            <h1 style="font-family:var(--font-display);font-size:3rem;color:white">Shopping Cart</h1>
+            <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Cart</span></div>
+        </div>
+    </div>
+
+    <div class="container cart-page">
+        <div class="cart-layout">
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-summary" id="cartSummary">
+                <h3>Order Summary</h3>
+                <div class="summary-content"></div>
+                <form id="couponForm" style="display: flex; gap: 10px; margin-bottom: 10px; width: 100%;">
+                    <input type="text" id="couponInput" placeholder="Coupon code" class="form-control" style="flex: 1; min-width: 0;">
+                    <button type="submit" class="btn btn-secondary" style="flex-shrink: 0; width: auto; padding: 0 24px;">Apply</button>
+                </form>
+                <div id="couponMessage" style="font-size: 0.85rem; margin-bottom: 15px; display: none;"></div>
+                <a href="checkout.html" class="btn btn-primary btn-lg">
+                    Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="shop.html" class="btn btn-secondary" style="margin-top:8px;width:100%;justify-content:center">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+        <div class="empty-state" id="emptyCart" style="display:none">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any items yet.</p>
+            <a href="shop.html" class="btn btn-primary">Start Shopping</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container"><div class="footer-bottom" style="border:none"><p>&copy; 2025 Swimming Store.</p></div></div>
+    </footer>
+    <script src="../js/main.js"></script>
+    <script src="../js/cart.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const couponForm = document.getElementById('couponForm');
+            
+            if (couponForm) {
+                couponForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const code = document.getElementById('couponInput').value.trim();
+                    const msg = document.getElementById('couponMessage');
+                    
+                    if (!code) return;
+
+                    try {
+                        const res = await fetch(`${API_BASE_URL}/coupons/validate/`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                coupon_code: code,
+                                user_id: CURRENT_USER_ID
+                            })
+                        });
+
+                        const data = await res.json();
+                        msg.style.display = 'block';
+
+                        if (res.ok) {
+                            msg.style.color = '#166534'; 
+                            
+                            // Format the text based on type 0 or 1
+                            let discountText = String(data.discount_type) === '1' ? `${data.discount_value}% off` : `$${data.discount_value} off`;
+                            msg.textContent = `Coupon applied! ${discountText}.`;
+                            
+                            localStorage.setItem('ss_couponCode', code);
+                            localStorage.setItem('ss_discountValue', data.discount_value);
+                            // --- NEW: Save the type ---
+                            localStorage.setItem('ss_discountType', data.discount_type); 
+                            
+                            if (typeof loadCart === 'function') loadCart();
+                            else if (typeof renderCart === 'function') renderCart();
+                            else window.location.reload(); 
+                            
+                        } else {
+                            // Error! Show red text and wipe memory
+                            msg.style.color = '#991b1b'; 
+                            msg.textContent = data.error;
+                            
+                            localStorage.removeItem('ss_couponCode');
+                            localStorage.removeItem('ss_discountValue');
+                            
+                            if (typeof loadCart === 'function') loadCart();
+                            else if (typeof renderCart === 'function') renderCart();
+                        }
+                    } catch (error) {
+                        console.error("Coupon fetch error:", error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

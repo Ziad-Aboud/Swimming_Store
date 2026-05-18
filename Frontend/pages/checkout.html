@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <style>
+        /* Smooth transitions for the payment box */
+        .payment-option { transition: all 0.2s ease-in-out; }
+        .payment-option.selected { border: 2px solid var(--primary) !important; background-color: #f8faff; }
+        .payment-option input[type="radio"] { accent-color: var(--primary); transform: scale(1.2); }
+    </style>
+</head>
+<body style="background-color: #f8f9fb;">
+    <nav class="navbar" style="background: white; border-bottom: 1px solid #eaeaea;">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 40px 0; min-height: 70vh;">
+        <h1 style="margin-bottom: 30px;">Checkout</h1>
+        
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+            
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px;">
+                    <h3>Shipping Address</h3>
+                    <a href="addresses.html" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">Change</a>
+                </div>
+                <div id="defaultAddressContainer" style="margin-bottom: 40px;">
+                    <p style="color: #666;"><i class="fas fa-spinner fa-spin"></i> Loading address...</p>
+                </div>
+
+                <h3 style="margin-bottom: 15px;">Payment Method</h3>
+                <div style="border: 1px solid #eaeaea; border-radius: 12px; padding: 24px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    
+                    <label class="payment-option selected" style="display: flex; align-items: center; padding: 16px; border: 1px solid #eaeaea; border-radius: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="payment_method" value="credit_card" checked style="margin-right: 12px;">
+                        <span style="font-weight: 500; font-size: 1.05rem;"><i class="fas fa-credit-card" style="margin-right:8px; color: #475569;"></i> Credit Card</span>
+                    </label>
+                    
+                    <label class="payment-option" style="display: flex; align-items: center; padding: 16px; border: 1px solid #eaeaea; border-radius: 8px; margin-bottom: 24px; cursor: pointer;">
+                        <input type="radio" name="payment_method" value="cash" style="margin-right: 12px;">
+                        <span style="font-weight: 500; font-size: 1.05rem;"><i class="fas fa-money-bill-wave" style="margin-right:8px; color: #16a34a;"></i> Cash on Delivery</span>
+                    </label>
+
+                    <div id="creditCardDetails">
+                        <div style="padding: 16px; border: 1px solid #eaeaea; border-radius: 8px; margin-bottom: 24px; background: #f8f9fb;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4 style="margin: 0; font-size: 0.95rem; color: #0f172a;">Saved Card</h4>
+                                <a href="payment.html" style="color: var(--primary); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Change</a>
+                            </div>
+                            <div id="defaultCardContainer">
+                                <p style="color: #666; font-size: 0.9rem; margin: 0;"><i class="fas fa-spinner fa-spin"></i> Loading card...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <div class="cart-summary" style="height: fit-content; background: white;">
+                <h3 style="margin-bottom: 20px;">Order Summary</h3>
+                <div class="summary-content" id="checkoutSummary">
+                    <p><i class="fas fa-spinner fa-spin"></i> Calculating totals...</p>
+                </div>
+                <button id="placeOrderBtn" class="btn btn-primary btn-lg" style="margin-top: 20px; width: 100%; border-radius: 30px;">
+                    Place Order <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div> 
+        </div> 
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!CURRENT_USER_ID) { window.location.href = 'login.html'; return; }
+
+            let selectedAddressId = null;
+            const addressContainer = document.getElementById('defaultAddressContainer');
+            const summaryContainer = document.getElementById('checkoutSummary');
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            const ccDetails = document.getElementById('creditCardDetails');
+
+            paymentOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                radio.addEventListener('change', () => {
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    
+                    if (radio.value === 'credit_card') {
+                        ccDetails.style.display = 'block';
+                    } else {
+                        ccDetails.style.display = 'none';
+                    }
+                });
+            });
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/addresses/${CURRENT_USER_ID}/`);
+                const data = await res.json();
+                
+                if (data.addresses && data.addresses.length > 0) {
+                    let defaultAddr = data.addresses.find(a => a.is_default);
+                    if (!defaultAddr) defaultAddr = data.addresses[0];
+                    
+                    selectedAddressId = defaultAddr.address_id;
+                    
+                    addressContainer.innerHTML = `
+                        <div style="border: 1px solid #eaeaea; border-radius: 12px; padding: 20px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                            <h4 style="margin-bottom:8px; font-size: 1.1rem;"><i class="fas fa-map-marker-alt" style="color:var(--primary); margin-right:8px;"></i>${defaultAddr.city}</h4>
+                            <p style="color:#475569; font-size:0.95rem; line-height:1.6; margin:0;">
+                                ${defaultAddr.street_address}<br>${defaultAddr.state}, ${defaultAddr.postal_code}<br>${defaultAddr.country}
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    addressContainer.innerHTML = `
+                        <div style="padding: 30px; text-align: center; border: 2px dashed #cbd5e1; border-radius: 12px; background: white;">
+                            <p style="margin-bottom: 15px; color: #475569;">You don't have a shipping address saved.</p>
+                            <a href="addresses.html" class="btn btn-primary" style="padding: 8px 24px;">Add Address</a>
+                        </div>`;
+                    placeOrderBtn.disabled = true;
+                    placeOrderBtn.style.opacity = '0.5';
+                }
+            } catch (error) {
+                console.error("Error loading addresses", error);
+            }
+
+            const cardContainer = document.getElementById('defaultCardContainer');
+            try {
+                const res = await fetch(`${API_BASE_URL}/payments/${CURRENT_USER_ID}/`);
+                const data = await res.json();
+
+                if (data.payments && data.payments.length > 0) {
+                    let defaultCard = data.payments.find(p => p.is_default);
+                    if (!defaultCard) defaultCard = data.payments[0];
+
+                    cardContainer.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fab fa-cc-visa" style="font-size: 1.8rem; color: #1e293b;"></i>
+                            <div>
+                                <p style="margin: 0; font-weight: 600; color: #0f172a; font-size: 0.95rem;">•••• •••• •••• ${defaultCard.last_four}</p>
+                                <p style="margin: 0; font-size: 0.85rem; color: #64748b;">Expires: ${defaultCard.expiry_date}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    cardContainer.innerHTML = `
+                        <p style="margin: 0 0 10px 0; color: #ef4444; font-size: 0.9rem;">You don't have any saved credit cards.</p>
+                        <a href="payment.html" class="btn btn-sm btn-primary" style="padding: 6px 16px;">Add a Card</a>
+                    `;
+                    
+                    document.getElementById('placeOrderBtn').addEventListener('click', (e) => {
+                        const selectedPayment = document.querySelector('input[name="payment_method"]:checked').value;
+                        if (selectedPayment === 'credit_card' && data.payments.length === 0) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            showToast('Please add a credit card or select Cash on Delivery.', 'error');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading payments", error);
+                cardContainer.innerHTML = '<p style="color: red; margin: 0;">Error loading card details.</p>';
+            }
+
+            // --- API LOGIC 2: Fetch Cart Totals ---
+            try {
+                const res = await fetch(`${API_BASE_URL}/cart/${CURRENT_USER_ID}/`);
+                const data = await res.json();
+                
+                if (data.items.length === 0) {
+                    window.location.href = 'cart.html'; return;
+                }
+
+                const subtotal = data.grand_total;
+                const storedDiscount = localStorage.getItem('ss_discountValue');
+                const storedType = localStorage.getItem('ss_discountType');
+                
+                let discountAmount = 0;
+                if (storedDiscount) {
+                    const val = parseFloat(storedDiscount);
+                    discountAmount = String(storedType) === '1' ? subtotal * (val / 100) : val;
+                }
+                if (discountAmount > subtotal) discountAmount = subtotal;
+
+                const discountedSubtotal = subtotal - discountAmount;
+                const shipping = discountedSubtotal > 100 ? 0 : 9.99;
+                const tax = discountedSubtotal * 0.08; 
+                const total = discountedSubtotal + shipping + tax;
+
+                let summaryHTML = `<div class="summary-row"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>`;
+                if (discountAmount > 0) {
+                    summaryHTML += `<div class="summary-row" style="color: #166534; font-weight: 600;"><span>Discount</span><span>-$${discountAmount.toFixed(2)}</span></div>`;
+                }
+                summaryHTML += `
+                    <div class="summary-row"><span>Shipping</span><span>${shipping === 0 ? 'Free' : '$' + shipping.toFixed(2)}</span></div>
+                    <div class="summary-row"><span>Tax</span><span>$${tax.toFixed(2)}</span></div>
+                    <div class="summary-row total" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eaeaea;">
+                        <span style="font-size: 1.2rem; font-weight: bold; color: #0f172a;">Total</span>
+                        <span style="font-size: 1.3rem; font-weight: bold; color: var(--primary);">$${total.toFixed(2)}</span>
+                    </div>`;
+                
+                summaryContainer.innerHTML = summaryHTML;
+            } catch (error) {
+                console.error("Error loading cart", error);
+            }
+
+            // --- API LOGIC 3: Place Order ---
+            placeOrderBtn.addEventListener('click', async () => {
+                if (!selectedAddressId) {
+                    showToast('Please add a shipping address first', 'error'); return;
+                }
+
+                const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+                placeOrderBtn.disabled = true;
+                placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/checkout/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_id: CURRENT_USER_ID,
+                            address_id: selectedAddressId,
+                            coupon_code: localStorage.getItem('ss_couponCode'),
+                            payment_method: selectedPaymentMethod // <--- NEW: Send it to the backend!
+                        })
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        localStorage.removeItem('ss_couponCode');
+                        localStorage.removeItem('ss_discountValue');
+                        localStorage.removeItem('ss_discountType');
+                        
+                        cart = [];
+                        if(typeof updateBadges === 'function') updateBadges();
+
+                        showToast('Order placed successfully!', 'success');
+                        setTimeout(() => { window.location.href = 'orders.html'; }, 1500);
+                    } else {
+                        showToast(data.error, 'error');
+                        placeOrderBtn.disabled = false;
+                        placeOrderBtn.innerHTML = 'Place Order <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>';
+                    }
+                } catch (error) {
+                    console.error("Checkout error:", error);
+                    showToast('Network error occurred.', 'error');
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.innerHTML = 'Place Order <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('products/', views.get_products),
+    path('users/', views.register_user),
+    path('login/', views.login_user),
+    path('cart/', views.add_to_cart),
+    path('cart/<int:user_id>/', views.view_cart),
+    path('cart/items/<int:cart_item_id>/', views.manage_cart_item),
+    path('checkout/', views.checkout),
+    path('products/<int:product_id>/', views.get_product_detail),
+    path('wishlist/', views.toggle_wishlist),
+    path('wishlist/toggle/', views.toggle_wishlist),
+    path('wishlist/<int:user_id>/', views.get_wishlist),
+    path('orders/<int:user_id>/', views.get_user_orders),
+    path('users/<int:user_id>/', views.update_profile),
+    path('addresses/<int:user_id>/', views.manage_addresses),
+    path('addresses/delete/<int:address_id>/', views.delete_address),
+    path('addresses/default/<int:user_id>/<int:address_id>/', views.set_default_address),
+    path('coupons/validate/', views.validate_coupon),
+    path('checkout/', views.checkout),
+    path('payments/<int:user_id>/', views.manage_payments),
+    path('payments/delete/<int:payment_id>/', views.delete_payment),
+    path('payments/default/<int:user_id>/<int:payment_id>/', views.set_default_payment),
+    path('reviews/<int:product_id>/', views.get_product_reviews),
+    path('reviews/add/', views.add_review),
+    path('reviews/delete/<int:review_id>/', views.delete_review),
+    path('reviews/update/<int:review_id>/', views.update_review),
+    path('categories/', views.get_categories),
+    path('products/<int:product_id>/related/', views.get_related_products),
+]

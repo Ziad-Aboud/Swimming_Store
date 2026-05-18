@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/shop.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right">
+                <a href="contact.html">Contact</a>
+                <button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../index.html" class="logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="shop.html" class="active">Shop</a></li>
+                <li class="dropdown">
+                    <a href="#">Categories <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=1">Swimsuits</a></li>
+                        <li><a href="shop.html?category=2">Goggles</a></li>
+                        <li><a href="shop.html?category=3">Swim Caps</a></li>
+                        <li><a href="shop.html?category=4">Fins</a></li>
+                        <li><a href="shop.html?category=5">Accessories</a></li>
+                        <li><a href="shop.html?category=6">Bags & Towels</a></li>
+                    </ul>
+                </li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i><span class="badge" id="wishBadge">0</span></a>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <a href="login.html" class="nav-icon"><i class="fas fa-user"></i></a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Shop All Products</h1>
+            <div class="breadcrumb">
+                <a href="../index.html">Home</a><span class="sep">/</span><span>Shop</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="shop-layout">
+            <aside class="shop-sidebar" id="shopSidebar">
+                <button id="clearFiltersBtn" class="btn btn-sm btn-secondary" style="margin-bottom:16px">
+                    Clear Filters <i class="fas fa-undo"></i>
+                </button>
+                <div class="filter-section">
+                    <h3>Categories</h3>
+                    <div class="filter-list" id="dynamicCategoryList" style="display: flex; flex-direction: column; gap: 10px;">
+                        <span style="color: #64748b; font-size: 0.9rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</span>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h3>Price Range</h3>
+                    <div class="price-range">
+                        <input type="number" id="minPrice" placeholder="Min" min="0">
+                        <span>–</span>
+                        <input type="number" id="maxPrice" placeholder="Max" min="0">
+                    </div>
+                </div>
+                
+            </aside>
+
+            <div class="shop-content">
+                <div class="shop-toolbar" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="filter-toggle-btn" id="filterToggle">
+                            <i class="fas fa-sliders"></i> Filters
+                        </button>
+                        <span class="results" id="resultCount">Showing products</span>
+                    </div>
+
+                    <div class="search-wrapper" style="flex: 1; max-width: 400px; min-width: 200px; position: relative;">
+                        <input type="text" id="searchInput" placeholder="Search products..." style="width: 100%; padding: 10px 15px 10px 38px; border: 1px solid #eaeaea; border-radius: 8px; font-family: inherit; font-size: 0.95rem; outline: none;">
+                        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <select class="sort-select" id="sortSelect">
+                            <option value="default">Default sorting</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="name">Name A–Z</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="product-grid" id="shopGrid"></div>
+                <div class="pagination">
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none">
+                <p>&copy; 2025 Swimming Store. All rights reserved.</p>
+                <div class="payment-icons">
+                    <i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+    <script src="../js/main.js"></script>
+    <script src="../js/shop.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Global Array to track what the user likes
+            let userWishlist = [];
+
+            // Global Function to Toggle Hearts
+            window.toggleWishlist = async function(event, productId) {
+                event.stopPropagation(); // Stops the main card click from triggering!
+                
+                if (typeof CURRENT_USER_ID === 'undefined' || !CURRENT_USER_ID) {
+                    window.location.href = 'login.html'; // Send to login if not logged in
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/wishlist/toggle/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: CURRENT_USER_ID, product_id: productId })
+                    });
+                    const data = await res.json();
+                    
+                    if (res.ok) {
+                        const icon = document.getElementById(`heart-${productId}`);
+                        if (icon) {
+                            if (data.added) {
+                                icon.className = 'fas fa-heart'; 
+                                icon.style.color = '#ef4444'; 
+                            } else {
+                                icon.className = 'far fa-heart'; 
+                                icon.style.color = '#cbd5e1'; 
+                            }
+                        }
+                        if (typeof updateWishlistBadge === 'function') updateWishlistBadge();
+                    }
+                } catch(e) { console.error(e); }
+            };
+            
+            // Track the current page globally
+            let currentPage = 1;
+            
+            // Core DOM Elements based on your exact HTML layout
+            const grid = document.getElementById('shopGrid');
+            const paginationContainer = document.querySelector('.pagination');
+            
+            // Function to fetch and draw products
+            window.applyShopFilters = function() {
+                // Show loading state
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i></div>';
+                
+                const params = new URLSearchParams();
+
+                // 1. Add Current Page
+                params.append('page', currentPage);
+
+                // 2. Add Checked Categories
+                document.querySelectorAll('input[name="category"]:checked').forEach(cb => {
+                    params.append('category', cb.value);
+                });
+
+                // 3. Add Price Range
+                const minInput = document.getElementById('minPrice');
+                const maxInput = document.getElementById('maxPrice');
+                
+                if (minInput && minInput.value) params.append('min_price', minInput.value);
+                if (maxInput && maxInput.value) params.append('max_price', maxInput.value);
+
+                // 4. Add Sorting
+                const sortSelect = document.getElementById('sortSelect');
+                if (sortSelect) params.append('sort', sortSelect.value);
+
+                // 5. Add Search Input
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput && searchInput.value) {
+                    params.append('search', searchInput.value.trim());
+                }
+
+                // Execute Fetch
+                fetch(`${API_BASE_URL}/products/?${params.toString()}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        // Extract the new data format from Django
+                        const productsArray = data.products;
+                        const totalPages = data.total_pages;
+
+                        // Update the Result Count Text
+                        const resultCount = document.getElementById('resultCount');
+                        if (resultCount) resultCount.textContent = `Showing ${data.total_items || productsArray.length} products`;
+
+                        // Handle Empty State
+                        if (!productsArray || productsArray.length === 0) {
+                            grid.innerHTML = `
+                                <div class="no-results" style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                                    <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                                    <h3>No products found</h3>
+                                    <p style="color: #64748b;">Try adjusting your filters.</p>
+                                </div>`;
+                            paginationContainer.innerHTML = ''; 
+                            return;
+                        }
+
+                        grid.innerHTML = productsArray.map(product => {
+                            // Check if this product is in the user's wishlist
+                            const isWished = userWishlist.includes(product.product_id);
+                            const heartClass = isWished ? 'fas fa-heart' : 'far fa-heart';
+                            const heartColor = isWished ? '#ef4444' : '#cbd5e1';
+
+                            let primaryImage = '../assets/placeholder.jpg';
+                            if (product.images && product.images.length > 0) {
+                                // Grab the first image URL from the list Django sent
+                                primaryImage = product.images[0].image_url; 
+                            }
+
+                            return `
+                            <div class="product-card" 
+                                 onclick="window.location.href='product.html?id=${product.product_id}'" 
+                                 style="position: relative; background: white; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; transition: transform 0.2s; cursor: pointer;">
+                                
+                                <button onclick="toggleWishlist(event, ${product.product_id})" 
+                                        style="position: absolute; top: 12px; right: 12px; z-index: 10; background: white; border: none; border-radius: 50%; width: 36px; height: 36px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                    <i class="${heartClass}" id="heart-${product.product_id}" style="color: ${heartColor}; font-size: 1.1rem; transition: 0.2s;"></i>
+                                </button>
+                                
+                                <div style="height: 200px; background: #f8f9fb; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    <img src="${primaryImage}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                
+                                <div style="padding: 20px;">
+                                    <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: #0f172a;">${product.name}</h3>
+                                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 15px; height: 40px; overflow: hidden;">${product.description}</p>
+                                    
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-size: 1.25rem; font-weight: bold; color: var(--primary);">$${parseFloat(product.base_price).toFixed(2)}</span>
+                                        <span class="btn btn-sm btn-outline">Details</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `}).join('');
+
+                        renderPagination(totalPages, currentPage);
+                    })
+                    .catch(error => {
+                        console.error("Fetch error:", error);
+                        grid.innerHTML = '<p style="color:red; grid-column: 1/-1;">Error loading products.</p>';
+                    });
+            };
+
+            // Function to generate the pagination buttons dynamically
+            function renderPagination(totalPages, activePage) {
+                if (totalPages <= 1) {
+                    paginationContainer.innerHTML = '';
+                    return; 
+                }
+
+                let html = '';
+                
+                // Back Button
+                if (activePage > 1) {
+                    html += `<button class="page-btn" onclick="goToPage(${activePage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+                }
+
+                // Number Buttons
+                for (let i = 1; i <= totalPages; i++) {
+                    const activeClass = i === activePage ? 'active' : '';
+                    html += `<button class="page-btn ${activeClass}" onclick="goToPage(${i})">${i}</button>`;
+                }
+
+                // Next Button
+                if (activePage < totalPages) {
+                    html += `<button class="page-btn" onclick="goToPage(${activePage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+                }
+
+                paginationContainer.innerHTML = html;
+            }
+
+            // Function triggered when a page button is clicked
+            window.goToPage = function(pageNumber) {
+                currentPage = pageNumber;
+                applyShopFilters();
+                // Smooth scroll back to the top of the grid
+                document.querySelector('.shop-toolbar').scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // --- ATTACH EVENT LISTENERS ---
+            
+            
+
+            // Listen to Sort Dropdown
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    currentPage = 1;
+                    applyShopFilters();
+                });
+            }
+
+            // Listen to Price Inputs (Debounced)
+            let priceTimeout;
+            const minInput = document.getElementById('minPrice');
+            const maxInput = document.getElementById('maxPrice');
+            
+            if (minInput && maxInput) {
+                [minInput, maxInput].forEach(el => {
+                    el.addEventListener('input', () => {
+                        clearTimeout(priceTimeout);
+                        priceTimeout = setTimeout(() => {
+                            currentPage = 1;
+                            applyShopFilters();
+                        }, 500); 
+                    });
+                });
+            }
+
+            
+
+            // Listen to Search Input (Debounced)
+            let searchTimeout;
+            const searchInputObj = document.getElementById('searchInput');
+            if (searchInputObj) {
+                searchInputObj.addEventListener('input', () => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        currentPage = 1; // Always reset to page 1 when searching
+                        applyShopFilters();
+                    }, 400); // Waits 400ms after they stop typing before hitting the database
+                });
+            }
+
+            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', () => {
+                    // 1. Uncheck all category checkboxes
+                    document.querySelectorAll('input[name="category"]').forEach(cb => cb.checked = false);
+
+                    // 2. Clear Price Inputs
+                    const minInput = document.getElementById('minPrice');
+                    const maxInput = document.getElementById('maxPrice');
+                    if (minInput) minInput.value = '';
+                    if (maxInput) maxInput.value = '';
+
+                    // 3. Clear Search Input
+                    const searchInput = document.getElementById('searchInput');
+                    if (searchInput) searchInput.value = '';
+
+                    // 4. Reset Sort Dropdown to Default
+                    const sortSelect = document.getElementById('sortSelect');
+                    if (sortSelect) sortSelect.value = 'default';
+
+                    // 5. Clean up the URL (Removes the ?category=X parameter if they came from the homepage)
+                    window.history.replaceState(null, '', window.location.pathname);
+
+                    // 6. Reset to Page 1 and fetch all fresh products!
+                    currentPage = 1;
+                    applyShopFilters();
+                });
+            }
+
+            async function loadSidebarCategories() {
+                const catList = document.getElementById('dynamicCategoryList');
+                if (!catList) return;
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/categories/`);
+                    const data = await res.json();
+                    
+                    // Draw the checkboxes with product counts pushed to the right!
+                    catList.innerHTML = data.categories.map(cat => `
+                        <label style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+                            <input type="checkbox" name="category" value="${cat.category_id}" style="margin-right: 8px;"> 
+                            ${cat.name} 
+                            <span style="margin-left: auto; font-size: 0.8rem; color: #94a3b8;">(${cat.product_count})</span>
+                        </label>
+                    `).join('');
+
+                    // Now that the checkboxes exist, attach the event listeners!
+                    document.querySelectorAll('input[name="category"]').forEach(el => {
+                        el.addEventListener('change', () => {
+                            currentPage = 1;
+                            applyShopFilters();
+                        });
+                    });
+
+                    // Check if the URL passed a category (e.g. clicking a category from the Home page)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const incomingCategory = urlParams.get('category');
+                    if (incomingCategory) {
+                        const targetCheckbox = document.querySelector(`input[name="category"][value="${incomingCategory}"]`);
+                        if (targetCheckbox) targetCheckbox.checked = true;
+                    }
+
+                } catch (error) {
+                    console.error("Category load error:", error);
+                    catList.innerHTML = '<span style="color:red; font-size:0.9rem;">Failed to load</span>';
+                }
+            }
+
+            // Initial Load: Get Categories -> Get Wishlist -> Load Products
+            loadSidebarCategories().then(() => {
+                if (typeof CURRENT_USER_ID !== 'undefined' && CURRENT_USER_ID) {
+                    fetch(`${API_BASE_URL}/wishlist/${CURRENT_USER_ID}/`)
+                        .then(res => res.json())
+                        .then(data => {
+                            userWishlist = data.wishlist_ids || [];
+                            applyShopFilters();
+                        })
+                        .catch(() => applyShopFilters()); 
+                } else {
+                    applyShopFilters(); 
+                }
+            });
+
+            // This runs silently in the background when the user clicks "Back" to return to the shop
+            window.addEventListener('pageshow', (event) => {
+                // Check if the page was loaded from the browser's history cache
+                if (event.persisted || (window.performance && window.performance.getEntriesByType("navigation")[0].type === "back_forward")) {
+                    
+                    if (typeof CURRENT_USER_ID !== 'undefined' && CURRENT_USER_ID) {
+                        fetch(`${API_BASE_URL}/wishlist/${CURRENT_USER_ID}/`, { cache: 'no-store' })
+                            .then(res => res.json())
+                            .then(data => {
+                                // 1. Update the memory array
+                                userWishlist = data.wishlist_ids || [];
+                                
+                                // 2. Loop through every heart on the screen and update its color instantly!
+                                document.querySelectorAll('[id^="heart-"]').forEach(icon => {
+                                    // Extract the product ID from the element's ID (e.g., "heart-15" -> 15)
+                                    const pid = parseInt(icon.id.replace('heart-', ''));
+                                    
+                                    if (userWishlist.includes(pid)) {
+                                        icon.className = 'fas fa-heart';
+                                        icon.style.color = '#ef4444'; // Red
+                                    } else {
+                                        icon.className = 'far fa-heart';
+                                        icon.style.color = '#cbd5e1'; // Gray
+                                    }
+                                });
+                            })
+                            .catch(e => console.error("Error syncing hearts on back button:", e));
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Swimming Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <a href="../index.html"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+            </div>
+            <div class="admin-nav-section">Main</div>
+            <nav class="admin-nav">
+                <a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="#"><i class="fas fa-box"></i> Products</a>
+                <a href="#"><i class="fas fa-shopping-cart"></i> Orders</a>
+                <a href="#"><i class="fas fa-users"></i> Customers</a>
+            </nav>
+            <div class="admin-nav-section">Management</div>
+            <nav class="admin-nav">
+                <a href="#"><i class="fas fa-tags"></i> Categories</a>
+                <a href="#"><i class="fas fa-percent"></i> Coupons</a>
+                <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
+            </nav>
+            <div class="admin-nav-section">System</div>
+            <nav class="admin-nav">
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="../index.html"><i class="fas fa-store"></i> View Store</a>
+                <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <div>
+                    <button class="hamburger" id="adminToggle" style="display:none;margin-right:16px">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <h1>Dashboard</h1>
+                    <p style="color:var(--text-secondary);font-size:0.9rem">Welcome back, Admin!</p>
+                </div>
+                <div class="admin-header-right">
+                    <button id="theme-toggle" class="theme-btn" style="font-size:1.1rem;color:var(--text)">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="nav-icon" style="color:var(--text)">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" style="background:var(--accent)">3</span>
+                    </button>
+                    <div class="admin-user">
+                        <div class="admin-user-avatar">A</div>
+                        <span style="font-weight:600;font-size:0.9rem">Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon blue"><i class="fas fa-dollar-sign"></i></div>
+                        <span class="stat-change up"><i class="fas fa-arrow-up"></i> 12.5%</span>
+                    </div>
+                    <h3>$48,592</h3>
+                    <p>Total Revenue</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon green"><i class="fas fa-shopping-cart"></i></div>
+                        <span class="stat-change up"><i class="fas fa-arrow-up"></i> 8.2%</span>
+                    </div>
+                    <h3>1,247</h3>
+                    <p>Total Orders</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon orange"><i class="fas fa-users"></i></div>
+                        <span class="stat-change up"><i class="fas fa-arrow-up"></i> 23.1%</span>
+                    </div>
+                    <h3>3,892</h3>
+                    <p>Total Customers</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon purple"><i class="fas fa-box"></i></div>
+                        <span class="stat-change down"><i class="fas fa-arrow-down"></i> 2.1%</span>
+                    </div>
+                    <h3>156</h3>
+                    <p>Total Products</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <h3>Revenue Overview</h3>
+                        <select class="sort-select" style="padding:8px 12px;font-size:0.8rem">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 90 days</option>
+                        </select>
+                    </div>
+                    <div class="chart-placeholder" id="revenueChart"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><h3>Top Products</h3></div>
+                    <div id="topProducts"></div>
+                </div>
+            </div>
+
+            <div class="dash-card recent-orders">
+                <div class="dash-card-header">
+                    <h3>Recent Orders</h3>
+                    <a href="#" class="btn btn-sm btn-secondary">View All</a>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th><th>Customer</th><th>Product</th>
+                                <th>Amount</th><th>Status</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#SS-001</strong></td><td>John Doe</td>
+                                <td><div class="table-product"><div class="table-product-img">👙</div>Carbon Pro Racing Suit</div></td>
+                                <td><strong>$289.99</strong></td>
+                                <td><span class="order-status status-delivered">Delivered</span></td>
+                                <td><div class="table-actions">
+                                    <button class="table-action-btn"><i class="fas fa-eye"></i></button>
+                                    <button class="table-action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-action-btn delete"><i class="fas fa-trash"></i></button>
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#SS-002</strong></td><td>Sarah K.</td>
+                                <td><div class="table-product"><div class="table-product-img">🥽</div>HydroVision Pro Goggles</div></td>
+                                <td><strong>$59.99</strong></td>
+                                <td><span class="order-status status-shipping">Shipping</span></td>
+                                <td><div class="table-actions">
+                                    <button class="table-action-btn"><i class="fas fa-eye"></i></button>
+                                    <button class="table-action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-action-btn delete"><i class="fas fa-trash"></i></button>
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#SS-003</strong></td><td>Mike R.</td>
+                                <td><div class="table-product"><div class="table-product-img">🎒</div>DryPack Sports Bag</div></td>
+                                <td><strong>$89.99</strong></td>
+                                <td><span class="order-status status-processing">Processing</span></td>
+                                <td><div class="table-actions">
+                                    <button class="table-action-btn"><i class="fas fa-eye"></i></button>
+                                    <button class="table-action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-action-btn delete"><i class="fas fa-trash"></i></button>
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#SS-004</strong></td><td>Emma J.</td>
+                                <td><div class="table-product"><div class="table-product-img">🦶</div>PowerKick Training Fins</div></td>
+                                <td><strong>$79.99</strong></td>
+                                <td><span class="order-status status-delivered">Delivered</span></td>
+                                <td><div class="table-actions">
+                                    <button class="table-action-btn"><i class="fas fa-eye"></i></button>
+                                    <button class="table-action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-action-btn delete"><i class="fas fa-trash"></i></button>
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#SS-005</strong></td><td>David K.</td>
+                                <td><div class="table-product"><div class="table-product-img">🩱</div>Sprint Jammer Pro</div></td>
+                                <td><strong>$159.99</strong></td>
+                                <td><span class="order-status status-shipping">Shipping</span></td>
+                                <td><div class="table-actions">
+                                    <button class="table-action-btn"><i class="fas fa-eye"></i></button>
+                                    <button class="table-action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="table-action-btn delete"><i class="fas fa-trash"></i></button>
+                                </div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <h3>Products Inventory</h3>
+                    <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Add Product</button>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chart = document.getElementById('revenueChart');
+            if (chart) {
+                const heights = [45,65,55,80,70,90,75,85,60,95,70,88];
+                chart.innerHTML = heights.map(h => `<div class="chart-bar" style="height:${h}%"></div>`).join('');
+            }
+
+            const topContainer = document.getElementById('topProducts');
+            if (topContainer) {
+                const top = [...PRODUCTS].sort((a,b) => b.price - a.price).slice(0,5);
+                topContainer.innerHTML = top.map((p,i) => `
+                    <div class="top-product-item">
+                        <div class="top-product-rank">${i+1}</div>
+                        <div style="font-size:1.5rem">${p.emoji}</div>
+                        <div class="top-product-info">
+                            <h4>${p.name}</h4>
+                            <span>$${p.price.toFixed(2)}</span>
+                        </div>
+                        <div class="top-product-sales">$${(p.price * (20 + i * 5)).toFixed(0)}</div>
+                    </div>`).join('');
+            }
+
+            const tbody = document.getElementById('productsTableBody');
+            if (tbody) {
+                const stocks = [45,120,200,78,150,95,30,180,55,89,110,67];
+                tbody.innerHTML = PRODUCTS.map((p,i) => `
+                    <tr>
+                        <td><div class="table-product"><div class="table-product-img">${p.emoji}</div>${p.name}</div></td>
+                        <td>${p.cat}</td>
+                        <td><strong>$${p.price.toFixed(2)}</strong></td>
+                        <td><span style="color:${stocks[i]<50?'#ff4757':'var(--secondary)'}">${stocks[i]}</span></td>
+                        <td><div class="table-actions">
+                            <button class="table-action-btn"><i class="fas fa-edit"></i></button>
+                            <button class="table-action-btn delete"><i class="fas fa-trash"></i></button>
+                        </div></td>
+                    </tr>`).join('');
+            }
+
+            const toggle  = document.getElementById('adminToggle');
+            const sidebar = document.getElementById('adminSidebar');
+            if (window.innerWidth <= 1024 && toggle) toggle.style.display = 'flex';
+            if (toggle && sidebar) toggle.addEventListener('click', () => sidebar.classList.toggle('active'));
+        });
+    </script>
+</body>
+</html>

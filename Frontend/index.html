@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swimming Store — Premium Swimming Gear</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+    <div class="loader" id="loader">
+        <div class="loader-inner">
+            <div class="water-drop"></div>
+            <span>SWIMMING STORE</span>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over $100</span>
+            <div class="top-bar-right">
+                <a href="pages/contact.html">Contact</a>
+                <button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="index.html" class="logo">
+                <i class="fas fa-water"></i> SWIMMING<span>STORE</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="pages/shop.html">Shop</a></li>
+                <li class="dropdown">
+                    <a href="#">Categories <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="pages/shop.html?category=1">Swimsuits</a></li>
+                        <li><a href="pages/shop.html?category=2">Goggles</a></li>
+                        <li><a href="pages/shop.html?category=3">Swim Caps</a></li>
+                        <li><a href="pages/shop.html?category=4">Fins</a></li>
+                        <li><a href="pages/shop.html?category=5">Accessories</a></li>
+                        <li><a href="pages/shop.html?category=6">Bags & Towels</a></li>
+                    </ul>
+                </li>
+                <li><a href="pages/contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="nav-icon search-toggle"><i class="fas fa-search"></i></button>
+                <a href="pages/wishlist.html" class="nav-icon"><i class="fas fa-heart"></i><span class="badge" id="wishBadge">0</span></a>
+                <a href="pages/cart.html" class="nav-icon"><i class="fas fa-shopping-bag"></i><span class="badge" id="cartBadge">0</span></a>
+                <a href="pages/login.html" class="nav-icon"><i class="fas fa-user"></i></a>
+                <button class="hamburger" id="hamburger">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+        <div class="search-overlay" id="searchOverlay">
+            <div class="container">
+                <form class="search-form">
+                    <input type="text" placeholder="Search for products..." class="search-input">
+                    <button type="button" class="search-close"><i class="fas fa-times"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-slider" id="heroSlider">
+            <div class="hero-slide active">
+                <div class="container hero-content">
+                    <div class="hero-text">
+                        <span class="hero-tag">NEW COLLECTION 2025</span>
+                        <h1>Dominate <br>The <span class="gradient-text">Water</span></h1>
+                        <p>Experience unmatched performance with our elite racing swimsuits engineered for champions.</p>
+                        <div class="hero-btns">
+                            <a href="pages/shop.html" class="btn btn-primary btn-lg">Shop Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-img-wrapper">
+                            <div class="hero-circle"></div>
+                            <div class="hero-product-img" >
+                                <img src="https://www.swimaholic.cz/db/wysiwyg/focus555.jpg" alt="Swimming Goggles" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <div class="container hero-content">
+                    <div class="hero-text">
+                        <span class="hero-tag">PROFESSIONAL GEAR</span>
+                        <h1>Precision <br><span class="gradient-text">Goggles</span></h1>
+                        <p>Crystal clear vision with anti-fog technology and hydrodynamic design.</p>
+                        <div class="hero-btns">
+                            <a href="pages/shop.html?cat=goggles" class="btn btn-primary btn-lg">Explore <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-img-wrapper">
+                            <div class="hero-circle"></div>
+                            <div class="hero-product-img" >
+                                <img src="https://prescriptiondivemasks.com/wp-content/uploads/2021/03/cressi-galileo25.jpg" alt="Swim Gear">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <div class="container hero-content">
+                    <div class="hero-text">
+                        <span class="hero-tag">TRAIN HARDER</span>
+                        <h1>Elite <br><span class="gradient-text">Training</span></h1>
+                        <p>Professional fins, kickboards and accessories built for serious athletes.</p>
+                        <div class="hero-btns">
+                            <a href="pages/shop.html?cat=accessories" class="btn btn-primary btn-lg">Discover <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-img-wrapper">
+                            <div class="hero-circle"></div>
+                            <div class="hero-product-img" >
+                                <img src="https://photos.cdn-outlet.com/photos/cms/images/14_fit_acc_23888_emyk(1).jpg" alt="Training Accessories">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-controls">
+            <button class="hero-prev"><i class="fas fa-chevron-left"></i></button>
+            <div class="hero-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <button class="hero-next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="section categories">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">BROWSE</span>
+                <h2>Shop by Category</h2>
+            </div>
+            <div class="category-grid" id="homeCategoryGrid">
+                <p style="text-align: center; grid-column: 1/-1; color: #64748b;"><i class="fas fa-spinner fa-spin"></i> Loading categories...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section featured">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">HANDPICKED</span>
+                <h2>Featured Products</h2>
+                <div class="section-tabs">
+                    <button class="tab-btn active" data-tab="all">All</button>
+                    <button class="tab-btn" data-tab="swimsuits">Swimsuits</button>
+                    <button class="tab-btn" data-tab="goggles">Goggles</button>
+                    <button class="tab-btn" data-tab="accessories">Accessories</button>
+                </div>
+            </div>
+            <div class="product-grid" id="featuredGrid"></div>
+        </div>
+    </section>
+
+    <section class="section bestsellers">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">POPULAR</span>
+                <h2>Best Sellers</h2>
+            </div>
+            <div class="scroll-wrapper">
+                <div class="product-scroll" id="bestsellerScroll"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-truck-fast"></i></div>
+                    <h3>Free Shipping</h3>
+                    <p>On orders over $100</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-rotate-left"></i></div>
+                    <h3>Easy Returns</h3>
+                    <p>30-day return policy</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+                    <h3>Secure Payment</h3>
+                    <p>100% secure checkout</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <h3>24/7 Support</h3>
+                    <p>Dedicated support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="footer-logo"><i class="fas fa-water"></i> SWIMMING<span>STORE</span></a>
+                    <p>Premium swimming gear for athletes who demand the best. Engineered for performance, designed for champions.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="pages/shop.html">Shop All</a></li>
+                        <li><a href="pages/contact.html">Contact</a></li>
+                        <li><a href="pages/orders.html">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="pages/shop.html?category=1">Swimsuits</a></li>
+                        <li><a href="pages/shop.html?category=2">Goggles</a></li>
+                        <li><a href="pages/shop.html?category=4">Fins</a></li>
+                        <li><a href="pages/shop.html?category=5">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Aqua Boulevard, Miami FL</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> hello@swimmingstore.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Swimming Store. All rights reserved.</p>
+                <div class="payment-icons">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+    <script>
+        // --- 1. FEATURED PRODUCTS LOGIC ---
+        const featuredGrid = document.getElementById('featuredGrid');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        // Map your HTML tab names to your Database Category IDs
+        const categoryMap = {
+            'all': '',
+            'swimsuits': '1',
+            'goggles': '2',
+            'accessories': '5'
+        };
+
+        async function loadFeaturedProducts(tabName) {
+            if (!featuredGrid) return;
+            featuredGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i></div>';
+            
+            const catId = categoryMap[tabName];
+            // Always grab page 1 for the homepage
+            let url = `${API_BASE_URL}/products/?page=1`;
+            if (catId) url += `&category=${catId}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                // Slice the array to only show 4 products so it looks neat
+                const products = data.products.slice(0, 4);
+                
+                if (products.length === 0) {
+                    featuredGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">No products found.</p>';
+                    return;
+                }
+
+                featuredGrid.innerHTML = products.map(product => {
+                    let primaryImage = 'assets/placeholder.jpg'; 
+                    if (product.images && product.images.length > 0) {
+                        primaryImage = product.images[0].image_url; 
+                    }
+
+                    return `
+                    <div class="product-card" onclick="window.location.href='pages/product.html?id=${product.product_id}'" style="background: white; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                        
+                        <div style="height: 200px; background: #f8f9fb; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                            <img src="${primaryImage}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        
+                        <div style="padding: 20px;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: #0f172a;">${product.name}</h3>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 15px; height: 40px; overflow: hidden;">${product.description}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: bold; color: var(--primary); font-size: 1.1rem;">$${parseFloat(product.base_price).toFixed(2)}</span>
+                                <span class="btn btn-sm btn-outline">Details</span>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            } catch (error) {
+                console.error("Error loading featured", error);
+            }
+        }
+
+        // Attach listeners to the Tabs
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                loadFeaturedProducts(e.target.dataset.tab);
+            });
+        });
+
+
+        // --- 2. BEST SELLERS LOGIC ---
+        const bestsellerScroll = document.getElementById('bestsellerScroll');
+        
+        async function loadBestSellers() {
+            if (!bestsellerScroll) return;
+            bestsellerScroll.innerHTML = '<div style="width: 100%; text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i></div>';
+            
+            try {
+                // Let's sort by "price_high" just to show a different set of premium products!
+                const res = await fetch(`${API_BASE_URL}/products/?page=1&sort=price_high`);
+                const data = await res.json();
+                
+                // Show 6 products in the horizontal scroll
+                const products = data.products.slice(0, 6);
+                
+                // Notice the "flex-shrink: 0" and "min-width: 280px". This forces them into a horizontal scrolling line!
+                bestsellerScroll.innerHTML = products.map(product => {
+                    let primaryImage = 'assets/placeholder.jpg';
+                    if (product.images && product.images.length > 0) {
+                        primaryImage = product.images[0].image_url; 
+                    }
+
+                    return `
+                    <div class="product-card" onclick="window.location.href='pages/product.html?id=${product.product_id}'" style="min-width: 280px; background: white; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; cursor: pointer; flex-shrink: 0; margin-right: 20px;">
+                        
+                        <div style="height: 200px; background: #f8f9fb; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                            <img src="${primaryImage}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        
+                        <div style="padding: 20px;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: #0f172a;">${product.name}</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: bold; color: var(--primary); font-size: 1.1rem;">$${parseFloat(product.base_price).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+                
+                // Add some basic CSS directly to the container to ensure it scrolls horizontally
+                bestsellerScroll.style.display = 'flex';
+                bestsellerScroll.style.overflowX = 'auto';
+                bestsellerScroll.style.paddingBottom = '20px';
+                
+            } catch (error) {
+                console.error("Error loading best sellers", error);
+            }
+        }
+        
+        // Trigger both loads immediately when the script runs
+        loadFeaturedProducts('all');
+        loadBestSellers();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.getElementById('homeCategoryGrid');
+            if (!grid) return;
+
+            // Map your database category names to FontAwesome icons
+            const iconMap = {
+                'Swimsuits': 'fa-person-swimming',
+                'Goggles': 'fa-glasses',
+                'Swim Caps': 'fa-hard-hat',
+                'Fins & Training': 'fa-shoe-prints',
+                'Accessories': 'fa-dumbbell',
+                'Bags & Towels': 'fa-bag-shopping'
+            };
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/categories/`);
+                const data = await res.json();
+
+                grid.innerHTML = data.categories.map(cat => {
+                    const iconClass = iconMap[cat.name] || 'fa-star'; 
+                    
+                    // Creates the link: pages/shop.html?category=1
+                    return `
+                        <a href="pages/shop.html?category=${cat.category_id}" class="category-card" style="text-decoration: none;">
+                            <div class="category-icon"><i class="fas ${iconClass}"></i></div>
+                            <h3>${cat.name}</h3>
+                            <span>${cat.product_count} Products</span>
+                        </a>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading home categories:', error);
+                grid.innerHTML = '<p style="color:red; text-align:center; grid-column: 1/-1;">Failed to load categories.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
