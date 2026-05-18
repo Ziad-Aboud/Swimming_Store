@@ -4,7 +4,7 @@ A premium, full-stack e-commerce web application engineered for high performance
 
 ![Swimming Store Home Page Preview](Photos/home_page.png)
 
-🎥 **[Watch the Full Demo Video Here]((https://drive.google.com/file/d/1IxS87H_Bs48DawQV5fGjhW2PpeKZ_CrK/view?usp=sharing))**
+🎥 **[Watch the Full Demo Video Here](https://drive.google.com/file/d/1IxS87H_Bs48DawQV5fGjhW2PpeKZ_CrK/view?usp=sharing)**
 
 ## ✨ System Architecture & Key Features
 
